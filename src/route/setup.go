@@ -7,6 +7,8 @@ import (
 
 func Setup(app *fiber.App) {
 
+	app.Get("/", controller.FrontHandler)
+
 	v1 := app.Group("v1")
 	v1.Post("auth", controller.AuthHandler)
 
