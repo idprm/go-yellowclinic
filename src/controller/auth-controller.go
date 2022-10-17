@@ -10,7 +10,7 @@ import (
 
 type AuthRequest struct {
 	Msisdn string `query:"msisdn" validate:"required" json:"msisdn"`
-	Name   string `query:"name" json:"name"`
+	Name   string `query:"name" validate:"required" json:"name"`
 }
 
 type ErrorResponse struct {
