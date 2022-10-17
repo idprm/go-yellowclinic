@@ -16,7 +16,7 @@ func Setup(app *fiber.App) {
 
 	doctor := v1.Group("doctors")
 	doctor.Get("/", controller.GetAllDoctor)
-	doctor.Get("/:id", controller.GetDoctor)
+	doctor.Get("/:username", controller.GetDoctor)
 
 	chat := v1.Group("chat")
 	chat.Post("/doctor", controller.ChatDoctor)

@@ -47,6 +47,7 @@ var configs = []model.Config{
 
 var doctors = []model.Doctor{
 	{
+		Username:             "dr-ernita",
 		Name:                 "dr. Ernita Rosyanti Dewi",
 		Photo:                "dr-ernita.png",
 		Number:               "STR 3121100220145699",
@@ -55,11 +56,11 @@ var doctors = []model.Doctor{
 		ConsultationSchedule: "06.00 - 23.00 WIB",
 		PlacePractice:        "Jakarta Timur, DKI Jakarta",
 		Phone:                "6281776736076",
-		UserId:               "dr-ernita",
 		Start:                time.Now(),
 		End:                  time.Now(),
 	},
 	{
+		Username:             "dr-ayu",
 		Name:                 "dr. Ayu A. Istiana",
 		Photo:                "dr-ayu.png",
 		Number:               "STR 3121100220145544",
@@ -68,11 +69,11 @@ var doctors = []model.Doctor{
 		ConsultationSchedule: "06.00 - 23.00 WIB",
 		PlacePractice:        "Bogor, Jawa Barat",
 		Phone:                "6281212480644",
-		UserId:               "dr-ayu",
 		Start:                time.Now(),
 		End:                  time.Now(),
 	},
 	{
+		Username:             "dr-peter",
 		Name:                 "dr. Peter Fernando",
 		Photo:                "dr-peter.png",
 		Number:               "STR 6111100120221435",
@@ -81,7 +82,6 @@ var doctors = []model.Doctor{
 		ConsultationSchedule: "06.00 - 23.00 WIB",
 		PlacePractice:        "Ngabang, Kalimantan Timur",
 		Phone:                "6281776736076",
-		UserId:               "dr-peter",
 		Start:                time.Now(),
 		End:                  time.Now(),
 	},

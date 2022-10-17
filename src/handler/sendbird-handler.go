@@ -173,7 +173,7 @@ func SendbirdDeleteUser(user model.User) (string, error) {
 func SendbirdCreateGroupChannel(doctor model.Doctor, user model.User) (string, string, string, error) {
 	url := "https://api-" + config.ViperEnv("SB_APP_ID") + ".sendbird.com/v3/group_channels"
 
-	users := []string{doctor.UserId, user.Msisdn}
+	users := []string{doctor.Username, user.Msisdn}
 	operators := []string{"yellow-clinic"}
 
 	now := time.Now()
@@ -366,7 +366,7 @@ func SendbirdAutoMessageDoctor(channel string, doctor model.Doctor, user model.U
 
 	message := AutoMessage{
 		MessageType: "MESG",
-		UserId:      doctor.UserId,
+		UserId:      doctor.Username,
 		Message:     replaceMessage,
 	}
 

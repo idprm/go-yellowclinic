@@ -16,7 +16,7 @@ type Doctor struct {
 	ConsultationSchedule string    `gorm:"size:250" json:"consultation_schedule"`
 	PlacePractice        string    `gorm:"size:250" json:"place_practice"`
 	Phone                string    `gorm:"size:15" json:"phone"`
-	UserId               string    `gorm:"size:25" json:"userId"`
+	Username             string    `gorm:"size:25" json:"username"`
 	Start                time.Time `gorm:"type:time" json:"start"`
 	End                  time.Time `gorm:"type:time" json:"end"`
 	gorm.Model           `json:"-"`

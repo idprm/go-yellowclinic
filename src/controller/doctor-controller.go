@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"strconv"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/idprm/go-yellowclinic/src/database"
 	"github.com/idprm/go-yellowclinic/src/model"
@@ -17,11 +15,10 @@ func GetAllDoctor(c *fiber.Ctx) error {
 }
 
 func GetDoctor(c *fiber.Ctx) error {
-	id, _ := strconv.Atoi(c.Params("id"))
+	username := c.Params("username")
 
 	var doctor model.Doctor
-	doctor.ID = uint(id)
-	database.Datasource.DB().First(&doctor)
+	database.Datasource.DB().Where("user_id", username).First(&doctor)
 
 	return c.Status(fiber.StatusOK).JSON(doctor)
 }
