@@ -75,15 +75,18 @@ func Connect() {
 		&model.User{},
 		&model.Config{},
 		&model.Doctor{},
+		&model.Clinic{},
 		&model.Chat{},
 	)
 
 	// TODO: Add seeders
 	var config []model.Config
 	var doctor []model.Doctor
+	var clinic []model.Clinic
 
 	resultConfig := db.Find(&config)
 	resultDoctor := db.Find(&doctor)
+	resultClinic := db.Find(&clinic)
 
 	if resultConfig.RowsAffected == 0 {
 		for i, _ := range configs {
@@ -94,6 +97,12 @@ func Connect() {
 	if resultDoctor.RowsAffected == 0 {
 		for i, _ := range doctors {
 			db.Model(&model.Doctor{}).Create(&doctors[i])
+		}
+	}
+
+	if resultClinic.RowsAffected == 0 {
+		for i, _ := range clinics {
+			db.Model(&model.Clinic{}).Create(&clinics[i])
 		}
 	}
 

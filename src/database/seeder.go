@@ -1,6 +1,10 @@
 package database
 
-import "github.com/idprm/go-yellowclinic/src/model"
+import (
+	"time"
+
+	"github.com/idprm/go-yellowclinic/src/model"
+)
 
 var configs = []model.Config{
 	{
@@ -17,7 +21,7 @@ var configs = []model.Config{
 	},
 	{
 		Name:  "NOTIF_OTP_USER",
-		Value: "Berikut adalah kode OTP kamu : *@v1* untuk mulai konsultasi dokter di sehatcepat.com",
+		Value: "Berikut adalah kode OTP kamu : *@v1* untuk mulai konsultasi dokter di yellowclinic.com",
 	},
 	{
 		Name:  "PRICE",
@@ -52,6 +56,8 @@ var doctors = []model.Doctor{
 		PlacePractice:        "Jakarta Timur, DKI Jakarta",
 		Phone:                "6281776736076",
 		UserId:               "dr-ernita",
+		Start:                time.Now(),
+		End:                  time.Now(),
 	},
 	{
 		Name:                 "dr. Ayu A. Istiana",
@@ -63,6 +69,8 @@ var doctors = []model.Doctor{
 		PlacePractice:        "Bogor, Jawa Barat",
 		Phone:                "6281212480644",
 		UserId:               "dr-ayu",
+		Start:                time.Now(),
+		End:                  time.Now(),
 	},
 	{
 		Name:                 "dr. Peter Fernando",
@@ -74,5 +82,16 @@ var doctors = []model.Doctor{
 		PlacePractice:        "Ngabang, Kalimantan Timur",
 		Phone:                "6281776736076",
 		UserId:               "dr-peter",
+		Start:                time.Now(),
+		End:                  time.Now(),
+	},
+}
+
+var clinics = []model.Clinic{
+	{
+		Name:     "Klinik Cepat Sehat Indonesia",
+		Address:  "Jl. Peternakan No.13, RT.5/RW.1, Kp. Tengah, Kec. Kramat jati, Jakarta, Daerah Khusus Ibukota Jakarta 13540",
+		Phone:    "+6281281881802",
+		IsActive: true,
 	},
 }
