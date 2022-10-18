@@ -18,7 +18,7 @@ func GetDoctor(c *fiber.Ctx) error {
 	username := c.Params("username")
 
 	var doctor model.Doctor
-	database.Datasource.DB().Where("user_id", username).First(&doctor)
+	database.Datasource.DB().Where("username", username).First(&doctor)
 
 	return c.Status(fiber.StatusOK).JSON(doctor)
 }
