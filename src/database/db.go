@@ -77,6 +77,9 @@ func Connect() {
 		&model.Doctor{},
 		&model.Clinic{},
 		&model.Chat{},
+		&model.Order{},
+		&model.Sendbird{},
+		&model.Zenziva{},
 	)
 
 	// TODO: Add seeders

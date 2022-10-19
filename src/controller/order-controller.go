@@ -25,7 +25,7 @@ const (
 
 type OrderRequest struct {
 	Msisdn   string `json:"msisdn"`
-	DoctorID uint   `json:"doctor_id"`
+	DoctorID int    `json:"doctor_id"`
 }
 
 func OrderChat(c *fiber.Ctx) error {
@@ -51,7 +51,13 @@ func OrderChat(c *fiber.Ctx) error {
 	 * Check Order
 	 */
 	var order model.Order
-	resultOrder := database.Datasource.DB().Where("user_id", user.ID).Where("doctor_id", doctor.ID).Where("DATE(created_at) = DATE(?)", time.Now()).First(&order)
+	resultOrder := database.Datasource.DB().
+		Where("user_id", user.ID).
+		Where("doctor_id", doctor.ID).
+		Where("DATE(created_at) = DATE(?)", time.Now()).
+		First(&order)
+
+	finishUrl := config.ViperEnv("APP_HOST") + "/chat"
 
 	if resultOrder.RowsAffected == 0 {
 		/**
@@ -67,7 +73,7 @@ func OrderChat(c *fiber.Ctx) error {
 		/**
 		 * SENDBIRD PROCESS
 		 */
-		err := sendbirdProcess(order)
+		err := sendbirdProcess(user.ID, doctor.ID)
 		if err != nil {
 			return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
 				"error":   true,
@@ -75,13 +81,32 @@ func OrderChat(c *fiber.Ctx) error {
 				"status":  fiber.StatusBadGateway,
 			})
 		}
-		return c.Status(fiber.StatusOK).JSON(fiber.Map{"error": false, "message": "Created chat"})
+
+		return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+			"error":        false,
+			"message":      "Created Successfull",
+			"redirect_url": finishUrl,
+			"status":       fiber.StatusCreated,
+		})
 	} else {
-		return c.Status(fiber.StatusOK).JSON(fiber.Map{"error": false, "message": "Already chat"})
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"error":        false,
+			"message":      "Already chat",
+			"redirect_url": finishUrl,
+			"status":       fiber.StatusOK,
+		})
 	}
 }
 
-func sendbirdProcess(order model.Order) error {
+func sendbirdProcess(userId uint64, doctorId uint) error {
+
+	var order model.Order
+	database.Datasource.DB().
+		Where("user_id", userId).
+		Where("doctor_id", doctorId).
+		Where("DATE(created_at) = DATE(?)", time.Now()).
+		Preload("User").Preload("Doctor").
+		First(&order)
 	/**
 	 * Check User Sendbird
 	 */
@@ -164,6 +189,7 @@ func sendbirdProcess(order model.Order) error {
 	if name != "" && url != "" {
 		// insert to chat
 		database.Datasource.DB().Create(&model.Chat{
+			OrderID:     order.ID,
 			DoctorID:    order.Doctor.ID,
 			UserID:      order.User.ID,
 			ChannelName: name,

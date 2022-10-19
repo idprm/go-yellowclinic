@@ -55,7 +55,7 @@ func SendbirdCreateUser(user model.User) (string, error) {
 	data := User{
 		UserId:     userId,
 		Nickname:   nickName,
-		ProfileUrl: "https://yellowclinic.sehatcepat.com/images/logo/sehatcepat.png",
+		ProfileUrl: "https://yellowclinic.sehatcepat.com/images/logo/yellow-clinic.png",
 	}
 
 	payload, _ := json.Marshal(data)

@@ -28,6 +28,7 @@ func Setup(app *fiber.App) {
 	 */
 	authenticated := v1.Group("authenticated")
 	authenticated.Use(jwtware.New(jwtware.Config{SigningKey: []byte(config.ViperEnv("JWT_SECRET_AUTH"))}))
+	authenticated.Post("orders", controller.OrderChat)
 	authenticated.Post("chat/user", controller.ChatUser)
 
 }
