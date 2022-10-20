@@ -50,6 +50,7 @@ var doctors = []model.Doctor{
 		Username:             "dr-ernita",
 		Name:                 "dr. Ernita Rosyanti Dewi",
 		Photo:                "dr-ernita.png",
+		Type:                 "Dokter Umum",
 		Number:               "STR 3121100220145699",
 		Experience:           5,
 		GraduatedFrom:        "Universitas Indonesia, 2007",
@@ -63,6 +64,7 @@ var doctors = []model.Doctor{
 		Username:             "dr-ayu",
 		Name:                 "dr. Ayu A. Istiana",
 		Photo:                "dr-ayu.png",
+		Type:                 "Dokter Umum",
 		Number:               "STR 3121100220145544",
 		Experience:           7,
 		GraduatedFrom:        "Universitas Yarsi, 2013",
@@ -76,6 +78,7 @@ var doctors = []model.Doctor{
 		Username:             "dr-peter",
 		Name:                 "dr. Peter Fernando",
 		Photo:                "dr-peter.png",
+		Type:                 "Dokter Umum",
 		Number:               "STR 6111100120221435",
 		Experience:           3,
 		GraduatedFrom:        "Universitas Tanjungpura, 2019",
@@ -90,8 +93,23 @@ var doctors = []model.Doctor{
 var clinics = []model.Clinic{
 	{
 		Name:     "Klinik Cepat Sehat Indonesia",
+		Photo:    "yellowclinic.png",
 		Address:  "Jl. Peternakan No.13, RT.5/RW.1, Kp. Tengah, Kec. Kramat jati, Jakarta, Daerah Khusus Ibukota Jakarta 13540",
-		Phone:    "+6281281881802",
+		Phone:    "6281281881802",
+		IsActive: true,
+	},
+	{
+		Name:     "Klinik Cepat Sehat Indonesia",
+		Photo:    "yellowclinic.png",
+		Address:  "Jl. Peternakan No.13, RT.5/RW.1, Kp. Tengah, Kec. Kramat jati, Jakarta, Daerah Khusus Ibukota Jakarta 13540",
+		Phone:    "6281281881802",
+		IsActive: true,
+	},
+	{
+		Name:     "Klinik Cepat Sehat Indonesia",
+		Photo:    "yellowclinic.png",
+		Address:  "Jl. Peternakan No.13, RT.5/RW.1, Kp. Tengah, Kec. Kramat jati, Jakarta, Daerah Khusus Ibukota Jakarta 13540",
+		Phone:    "6281281881802",
 		IsActive: true,
 	},
 }

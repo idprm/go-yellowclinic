@@ -11,6 +11,7 @@ type Doctor struct {
 	Username             string    `gorm:"size:25;unique;not null" json:"username"`
 	Name                 string    `gorm:"size:100;not null" json:"name"`
 	Photo                string    `gorm:"size:150;not null" json:"photo"`
+	Type                 string    `gorm:"size:200" json:"type"`
 	Number               string    `gorm:"size:100" json:"number"`
 	Experience           int       `gorm:"size:2" json:"experience"`
 	GraduatedFrom        string    `gorm:"size:150" json:"graduated_from"`

@@ -18,6 +18,10 @@ func Setup(app *fiber.App) {
 	doctor.Get("/", controller.GetAllDoctor)
 	doctor.Get("/:username", controller.GetDoctor)
 
+	clinic := v1.Group("clinics")
+	clinic.Get("/", controller.GetAllClinic)
+	clinic.Get("/:slug", controller.GetClinic)
+
 	chat := v1.Group("chat")
 	chat.Post("/doctor", controller.ChatDoctor)
 	chat.Delete("/leave", controller.ChatLeave)
