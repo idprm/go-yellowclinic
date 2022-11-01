@@ -9,8 +9,9 @@ import (
 )
 
 type AuthRequest struct {
-	Msisdn string `query:"msisdn" validate:"required" json:"msisdn"`
-	Name   string `query:"name" validate:"required" json:"name"`
+	Msisdn  string `query:"msisdn" validate:"required" json:"msisdn"`
+	Name    string `query:"name" validate:"required" json:"name"`
+	UserIds string `query:"user_ids" validate:"required" json:"user_ids"`
 }
 
 type ErrorResponse struct {
@@ -70,12 +71,14 @@ func AuthHandler(c *fiber.Ctx) error {
 
 	if isExist.RowsAffected == 0 {
 		database.Datasource.DB().Create(&model.User{
-			Msisdn: req.Msisdn,
-			Name:   req.Name,
+			Msisdn:  req.Msisdn,
+			Name:    req.Name,
+			UserIds: req.UserIds,
 		})
 	} else {
 		user.Msisdn = req.Msisdn
 		user.Name = req.Name
+		user.UserIds = req.UserIds
 		database.Datasource.DB().Save(&user)
 	}
 

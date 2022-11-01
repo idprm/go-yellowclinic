@@ -3,7 +3,6 @@ package controller
 import (
 	"errors"
 	"strings"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/idprm/go-yellowclinic/src/config"
@@ -89,9 +88,9 @@ func OrderChat(c *fiber.Ctx) error {
 		})
 	} else {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
-			"error":        false,
-			"message":      "Already chat",
-			"redirect_url": finishUrl,
+			"error":        true,
+			"message":      "Already chat ",
+			"redirect_url": "",
 			"status":       fiber.StatusOK,
 		})
 	}
@@ -103,7 +102,6 @@ func sendbirdProcess(userId uint64, doctorId uint) error {
 	database.Datasource.DB().
 		Where("user_id", userId).
 		Where("doctor_id", doctorId).
-		Where("DATE(created_at) = DATE(?)", time.Now()).
 		Preload("User").Preload("Doctor").
 		First(&order)
 	/**
