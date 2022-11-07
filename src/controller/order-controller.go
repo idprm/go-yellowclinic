@@ -52,7 +52,6 @@ func OrderChat(c *fiber.Ctx) error {
 	var order model.Order
 	resultOrder := database.Datasource.DB().
 		Where("user_id", user.ID).
-		Where("doctor_id", doctor.ID).
 		First(&order)
 
 	finishUrl := config.ViperEnv("APP_HOST") + "/chat"
@@ -82,7 +81,7 @@ func OrderChat(c *fiber.Ctx) error {
 
 		return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 			"error":        false,
-			"message":      "Created Successfull",
+			"message":      "Created Successful",
 			"redirect_url": finishUrl,
 			"status":       fiber.StatusCreated,
 		})
@@ -90,7 +89,7 @@ func OrderChat(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"error":        true,
 			"message":      "Already chat ",
-			"redirect_url": "",
+			"redirect_url": "Kuota chat Anda sudah terpakai!",
 			"status":       fiber.StatusOK,
 		})
 	}
