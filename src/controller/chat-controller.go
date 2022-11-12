@@ -88,7 +88,22 @@ func ChatLeave(c *fiber.Ctx) error {
 
 	if isLeave == true {
 		//
+
 	}
+
+	callback, err := handler.CallbackVoucher(user.VoucherCode)
+	if err != nil {
+		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
+			"error":   true,
+			"message": err.Error(),
+		})
+	}
+	database.Datasource.DB().Create(&model.Callback{
+		Msisdn:   user.Msisdn,
+		Action:   "CALLBACK",
+		Response: callback,
+	})
+
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"error": false, "message": "Leaved"})
 }
 

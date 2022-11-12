@@ -80,6 +80,7 @@ func Connect() {
 		&model.Order{},
 		&model.Sendbird{},
 		&model.Zenziva{},
+		&model.Callback{},
 	)
 
 	// TODO: Add seeders

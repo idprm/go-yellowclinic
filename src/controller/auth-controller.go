@@ -9,9 +9,10 @@ import (
 )
 
 type AuthRequest struct {
-	Msisdn  string `query:"msisdn" validate:"required" json:"msisdn"`
-	Name    string `query:"name" validate:"required" json:"name"`
-	UserIds string `query:"user_ids" validate:"required" json:"user_ids"`
+	Msisdn      string `query:"msisdn" validate:"required" json:"msisdn"`
+	Name        string `query:"name" validate:"required" json:"name"`
+	UserIds     string `query:"user_ids" validate:"required" json:"user_ids"`
+	VoucherCode string `query:"voucher_code" json:"voucher_code"`
 }
 
 type ErrorResponse struct {
@@ -40,6 +41,7 @@ func ValidateAuth(req AuthRequest) []*ErrorResponse {
 func FrontHandler(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"error":    false,
+		"status":   fiber.StatusOK,
 		"messsage": "Welcome to yellowclinic",
 	})
 }
@@ -71,14 +73,16 @@ func AuthHandler(c *fiber.Ctx) error {
 
 	if isExist.RowsAffected == 0 {
 		database.Datasource.DB().Create(&model.User{
-			Msisdn:  req.Msisdn,
-			Name:    req.Name,
-			UserIds: req.UserIds,
+			Msisdn:      req.Msisdn,
+			Name:        req.Name,
+			UserIds:     req.UserIds,
+			VoucherCode: req.VoucherCode,
 		})
 	} else {
 		user.Msisdn = req.Msisdn
 		user.Name = req.Name
 		user.UserIds = req.UserIds
+		user.VoucherCode = req.VoucherCode
 		database.Datasource.DB().Save(&user)
 	}
 
