@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/idprm/go-yellowclinic/src/database"
 	"github.com/idprm/go-yellowclinic/src/handler"
@@ -8,8 +10,8 @@ import (
 )
 
 type ChatRequest struct {
-	Msisdn     string `query:"msisdn" validate:"required" json:"msisdn"`
-	ChannelUrl string `query:"channel_url" validate:"required" json:"channel_url"`
+	Msisdn     string `query:"msisdn" json:"msisdn"`
+	ChannelUrl string `query:"channel_url" json:"channel_url"`
 }
 
 func ChatUser(c *fiber.Ctx) error {
@@ -72,7 +74,7 @@ func ChatLeave(c *fiber.Ctx) error {
 	var chat model.Chat
 	database.Datasource.DB().Where("user_id", user.ID).First(&chat)
 
-	leaveGroupChannel, isLeave, err := handler.SendbirdLeaveGroupChannel(chat.ChannelUrl, user.Msisdn)
+	leaveGroupChannel, _, err := handler.SendbirdLeaveGroupChannel(chat.ChannelUrl, user.Msisdn)
 	if err != nil {
 		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
 			"error":   true,
@@ -86,10 +88,9 @@ func ChatLeave(c *fiber.Ctx) error {
 		Response: leaveGroupChannel,
 	})
 
-	if isLeave == true {
-		//
-
-	}
+	chat.IsLeave = true
+	chat.LeaveAt = time.Now()
+	database.Datasource.DB().Save(&chat)
 
 	callback, err := handler.CallbackVoucher(user.VoucherCode)
 	if err != nil {
@@ -98,9 +99,60 @@ func ChatLeave(c *fiber.Ctx) error {
 			"message": err.Error(),
 		})
 	}
+
 	database.Datasource.DB().Create(&model.Callback{
 		Msisdn:   user.Msisdn,
-		Action:   "CALLBACK",
+		Action:   user.VoucherCode,
+		Response: callback,
+	})
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"error": false, "message": "Leaved"})
+}
+
+func ChatLeaveDoctor(c *fiber.Ctx) error {
+	c.Accepts("application/json")
+
+	req := new(ChatRequest)
+
+	err := c.BodyParser(req)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error":   true,
+			"message": err.Error(),
+		})
+	}
+
+	var chat model.Chat
+	database.Datasource.DB().Where("channel_url", req.ChannelUrl).Preload("User").First(&chat)
+
+	leaveGroupChannel, _, err := handler.SendbirdLeaveGroupChannel(chat.ChannelUrl, chat.User.Msisdn)
+	if err != nil {
+		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
+			"error":   true,
+			"message": err.Error(),
+		})
+	}
+
+	chat.IsLeave = true
+	chat.LeaveAt = time.Now()
+	database.Datasource.DB().Save(&chat)
+
+	database.Datasource.DB().Create(&model.Sendbird{
+		Msisdn:   chat.User.Msisdn,
+		Action:   "LEAVE GROUP CHANNEL",
+		Response: leaveGroupChannel,
+	})
+
+	callback, err := handler.CallbackVoucher(chat.User.VoucherCode)
+	if err != nil {
+		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
+			"error":   true,
+			"message": err.Error(),
+		})
+	}
+	database.Datasource.DB().Create(&model.Callback{
+		Msisdn:   chat.User.Msisdn,
+		Action:   chat.User.VoucherCode,
 		Response: callback,
 	})
 

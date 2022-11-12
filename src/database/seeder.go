@@ -43,6 +43,10 @@ var configs = []model.Config{
 		Name:  "PAGE_ERROR",
 		Value: "-",
 	},
+	{
+		Name:  "LIMIT_VOUCHER",
+		Value: "5000",
+	},
 }
 
 var doctors = []model.Doctor{

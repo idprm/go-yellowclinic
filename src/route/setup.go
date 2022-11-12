@@ -25,6 +25,7 @@ func Setup(app *fiber.App) {
 	chat := v1.Group("chat")
 	chat.Post("/doctor", controller.ChatDoctor)
 	chat.Delete("/leave", controller.ChatLeave)
+	chat.Post("/leave/doctor", controller.ChatLeaveDoctor)
 	chat.Delete("/delete", controller.ChatDelete)
 
 	/**

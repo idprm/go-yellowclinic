@@ -2,6 +2,7 @@ package controller
 
 import (
 	"errors"
+	"strconv"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -37,6 +38,23 @@ func OrderChat(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error":   true,
 			"message": err.Error(),
+		})
+	}
+
+	var count int64
+	database.Datasource.DB().Model(&model.Order{}).Count(&count)
+
+	var confLimit model.Config
+	database.Datasource.DB().Where("name", "LIMIT_VOUCHER").First(&confLimit)
+
+	intLimit, _ := strconv.ParseInt(confLimit.Value, 0, 64)
+
+	if count >= intLimit {
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"error":        true,
+			"message":      "Limited Voucher",
+			"redirect_url": "Batas Voucher telah habis",
+			"status":       fiber.StatusOK,
 		})
 	}
 
