@@ -51,10 +51,9 @@ func OrderChat(c *fiber.Ctx) error {
 
 	if count >= intLimit {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
-			"error":        true,
-			"message":      "Limited Voucher",
-			"redirect_url": "Batas Voucher telah habis",
-			"status":       fiber.StatusOK,
+			"error":   true,
+			"message": "Batas Voucher telah habis",
+			"status":  fiber.StatusOK,
 		})
 	}
 
@@ -105,10 +104,9 @@ func OrderChat(c *fiber.Ctx) error {
 		})
 	} else {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
-			"error":        true,
-			"message":      "Already chat ",
-			"redirect_url": "Kuota chat Anda sudah terpakai!",
-			"status":       fiber.StatusOK,
+			"error":   true,
+			"message": "Already chat",
+			"status":  fiber.StatusOK,
 		})
 	}
 }
