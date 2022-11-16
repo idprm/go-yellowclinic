@@ -92,7 +92,7 @@ func ChatLeave(c *fiber.Ctx) error {
 	chat.LeaveAt = time.Now()
 	database.Datasource.DB().Save(&chat)
 
-	callback, err := handler.CallbackVoucher(user.VoucherCode)
+	callback, err := handler.CallbackVoucher(user.LatestVoucher)
 	if err != nil {
 		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
 			"error":   true,
@@ -102,7 +102,7 @@ func ChatLeave(c *fiber.Ctx) error {
 
 	database.Datasource.DB().Create(&model.Callback{
 		Msisdn:   user.Msisdn,
-		Action:   user.VoucherCode,
+		Action:   user.LatestVoucher,
 		Response: callback,
 	})
 
@@ -143,7 +143,7 @@ func ChatLeaveDoctor(c *fiber.Ctx) error {
 		Response: leaveGroupChannel,
 	})
 
-	callback, err := handler.CallbackVoucher(chat.User.VoucherCode)
+	callback, err := handler.CallbackVoucher(chat.User.LatestVoucher)
 	if err != nil {
 		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
 			"error":   true,
@@ -152,7 +152,7 @@ func ChatLeaveDoctor(c *fiber.Ctx) error {
 	}
 	database.Datasource.DB().Create(&model.Callback{
 		Msisdn:   chat.User.Msisdn,
-		Action:   chat.User.VoucherCode,
+		Action:   chat.User.LatestVoucher,
 		Response: callback,
 	})
 

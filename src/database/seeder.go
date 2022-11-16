@@ -75,8 +75,8 @@ var doctors = []model.Doctor{
 		ConsultationSchedule: "06.00 - 23.00 WIB",
 		PlacePractice:        "Bogor, Jawa Barat",
 		Phone:                "6281212480644",
-		Start:                time.Now(),
-		End:                  time.Now(),
+		Start:                time.Date(2020, time.April, 11, 00, 01, 01, 0, time.Local),
+		End:                  time.Date(2020, time.April, 11, 23, 59, 01, 0, time.Local),
 	},
 	{
 		Username:             "dr-peter",

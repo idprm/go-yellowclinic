@@ -25,6 +25,7 @@ const (
 
 type OrderRequest struct {
 	Msisdn   string `json:"msisdn"`
+	Voucher  string `json:"voucher"`
 	DoctorID int    `json:"doctor_id"`
 }
 
@@ -68,7 +69,7 @@ func OrderChat(c *fiber.Ctx) error {
 	 */
 	var order model.Order
 	resultOrder := database.Datasource.DB().
-		Where("user_id", user.ID).
+		Where("voucher", user.LatestVoucher).
 		First(&order)
 
 	finishUrl := config.ViperEnv("APP_HOST") + "/chat"
@@ -81,6 +82,7 @@ func OrderChat(c *fiber.Ctx) error {
 			UserID:   user.ID,
 			DoctorID: doctor.ID,
 			Number:   "ORD-" + util.TimeStamp(),
+			Voucher:  user.LatestVoucher,
 			Total:    0,
 		})
 
@@ -105,7 +107,7 @@ func OrderChat(c *fiber.Ctx) error {
 	} else {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"error":   true,
-			"message": "Already chat",
+			"message": "Voucher sudah terpakai",
 			"status":  fiber.StatusOK,
 		})
 	}

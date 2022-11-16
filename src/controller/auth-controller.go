@@ -9,10 +9,9 @@ import (
 )
 
 type AuthRequest struct {
-	Msisdn      string `query:"msisdn" validate:"required" json:"msisdn"`
-	Name        string `query:"name" validate:"required" json:"name"`
-	UserIds     string `query:"user_ids" validate:"required" json:"user_ids"`
-	VoucherCode string `query:"voucher_code" json:"voucher_code"`
+	Msisdn  string `query:"msisdn" validate:"required" json:"msisdn"`
+	Name    string `query:"name" validate:"required" json:"name"`
+	Voucher string `query:"voucher" json:"voucher"`
 }
 
 type ErrorResponse struct {
@@ -73,16 +72,12 @@ func AuthHandler(c *fiber.Ctx) error {
 
 	if isExist.RowsAffected == 0 {
 		database.Datasource.DB().Create(&model.User{
-			Msisdn:      req.Msisdn,
-			Name:        req.Name,
-			UserIds:     req.UserIds,
-			VoucherCode: req.VoucherCode,
+			Msisdn:        req.Msisdn,
+			Name:          req.Name,
+			LatestVoucher: req.Voucher,
 		})
 	} else {
-		user.Msisdn = req.Msisdn
-		user.Name = req.Name
-		user.UserIds = req.UserIds
-		user.VoucherCode = req.VoucherCode
+		user.LatestVoucher = req.Voucher
 		database.Datasource.DB().Save(&user)
 	}
 

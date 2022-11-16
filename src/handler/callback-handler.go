@@ -15,20 +15,20 @@ import (
  * https://api.golkarekta.com/v7/callback/data/cepat_sehat
  */
 type CallbackRequest struct {
-	VoucherCode string `form:"voucher_code" json:"voucher_code"`
+	Voucher string `form:"voucher" json:"voucher"`
 }
 
 func CallbackVoucher(voucher string) (string, error) {
 	urlAddress := config.ViperEnv("GOLKAREKTA_URL") + "/v7/callback/data/cepat_sehat/"
 
 	reqBody := CallbackRequest{
-		VoucherCode: voucher,
+		Voucher: voucher,
 	}
 
 	var bearer = "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImV4cCI6MTY5MjE0MTg5OH0.eyJuYW1lIjoidmlzaW9ucGx1cyIsIndoaXRlbGlzdF9pcCI6Ijo6MSIsInR5cGUiOiIiLCJ1c2VybmFtZSI6InZpc2lvbnBsdXMiLCJrZXkiOiJ2aXNpb25wbHVzIiwidHlwZV9leHBpcmVkIjoiY29udGludWUiLCJpc19zdGFydCI6IjIwMjItMDgtMTUgMDg6MDA6MDAiLCJpc19lbmQiOiIyMDIzLTA4LTE1IDIzOjU5OjU5Iiwib25fZGF5cyI6IiIsInRpbWVzIjoiMjAyMjA4MTUwMjI0NTkifQ.4rp_CRiw8axNnMI9gWLU5We12gBcJX3csQ5aBsenSoM"
 
 	param := url.Values{}
-	param.Set("voucher_code", reqBody.VoucherCode)
+	param.Set("voucher_code", reqBody.Voucher)
 	payload := bytes.NewBufferString(param.Encode())
 
 	req, err := http.NewRequest("POST", urlAddress, payload)
