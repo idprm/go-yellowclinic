@@ -83,7 +83,7 @@ func OrderChat(c *fiber.Ctx) error {
 			DoctorID: doctor.ID,
 			Number:   "ORD-" + util.TimeStamp(),
 			Voucher:  user.LatestVoucher,
-			Total:    0,
+			Total:    10000,
 		})
 
 		/**
@@ -105,11 +105,25 @@ func OrderChat(c *fiber.Ctx) error {
 			"status":       fiber.StatusCreated,
 		})
 	} else {
-		return c.Status(fiber.StatusOK).JSON(fiber.Map{
-			"error":   true,
-			"message": "Voucher sudah terpakai",
-			"status":  fiber.StatusOK,
-		})
+
+		var chat model.Chat
+		resultCount := database.Datasource.DB().Joins("Order", database.Datasource.DB().Where(&model.Order{Voucher: user.LatestVoucher})).Where("is_leave", false).First(&chat)
+
+		if resultCount.RowsAffected > 0 {
+			return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+				"error":        false,
+				"message":      "Already Chat",
+				"redirect_url": finishUrl,
+				"status":       fiber.StatusCreated,
+			})
+		} else {
+			return c.Status(fiber.StatusOK).JSON(fiber.Map{
+				"error":   true,
+				"message": "Voucher sudah terpakai",
+				"status":  fiber.StatusOK,
+			})
+		}
+
 	}
 }
 

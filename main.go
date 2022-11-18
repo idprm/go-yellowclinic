@@ -16,4 +16,5 @@ func main() {
 	 * SETUP COBRA
 	 */
 	cmd.Execute()
+
 }
