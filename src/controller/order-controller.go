@@ -89,7 +89,7 @@ func OrderChat(c *fiber.Ctx) error {
 		/**
 		 * SENDBIRD PROCESS
 		 */
-		err := sendbirdProcess(user.ID, doctor.ID)
+		err := sendbirdProcess(user.ID, doctor.ID, user.LatestVoucher)
 		if err != nil {
 			return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
 				"error":   true,
@@ -127,12 +127,13 @@ func OrderChat(c *fiber.Ctx) error {
 	}
 }
 
-func sendbirdProcess(userId uint64, doctorId uint) error {
+func sendbirdProcess(userId uint64, doctorId uint, latestVoucher string) error {
 
 	var order model.Order
 	database.Datasource.DB().
 		Where("user_id", userId).
 		Where("doctor_id", doctorId).
+		Where("voucher", latestVoucher).
 		Preload("User").Preload("Doctor").
 		First(&order)
 	/**

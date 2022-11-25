@@ -11,6 +11,7 @@ import (
 
 type ChatRequest struct {
 	Msisdn     string `query:"msisdn" json:"msisdn"`
+	Voucher    string `query:"voucher" json:"voucher"`
 	ChannelUrl string `query:"channel_url" json:"channel_url"`
 }
 
@@ -30,8 +31,18 @@ func ChatUser(c *fiber.Ctx) error {
 	var user model.User
 	database.Datasource.DB().Where("msisdn", req.Msisdn).First(&user)
 
+	var order model.Order
+	isOrder := database.Datasource.DB().Where("voucher", req.Voucher).Where("user_id", user.ID).First(&order)
+
+	if isOrder.RowsAffected == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error":   true,
+			"message": "Not found",
+		})
+	}
+
 	var chat model.Chat
-	isChat := database.Datasource.DB().Where("user_id", user.ID).Preload("User").Preload("Doctor").First(&chat)
+	isChat := database.Datasource.DB().Where("order_id", order.ID).Preload("User").Preload("Doctor").First(&chat)
 
 	if isChat.Error != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
