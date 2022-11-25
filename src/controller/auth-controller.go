@@ -9,9 +9,10 @@ import (
 )
 
 type AuthRequest struct {
-	Msisdn  string `query:"msisdn" validate:"required" json:"msisdn"`
-	Name    string `query:"name" validate:"required" json:"name"`
-	Voucher string `query:"voucher" json:"voucher"`
+	Msisdn    string `query:"msisdn" validate:"required" json:"msisdn"`
+	Name      string `query:"name" validate:"required" json:"name"`
+	Voucher   string `query:"voucher" json:"voucher"`
+	IpAddress string `query:"ip_address" json:"ip_address"`
 }
 
 type ErrorResponse struct {
@@ -75,9 +76,11 @@ func AuthHandler(c *fiber.Ctx) error {
 			Msisdn:        req.Msisdn,
 			Name:          req.Name,
 			LatestVoucher: req.Voucher,
+			IpAddress:     req.IpAddress,
 		})
 	} else {
 		user.LatestVoucher = req.Voucher
+		user.IpAddress = req.IpAddress
 		database.Datasource.DB().Save(&user)
 	}
 
