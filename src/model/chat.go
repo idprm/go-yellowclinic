@@ -7,7 +7,7 @@ import (
 )
 
 type Chat struct {
-	ID          uint64    `gorm:"primaryKey"`
+	ID          uint64    `gorm:"primaryKey" json:"id"`
 	OrderID     uint64    `json:"order_id"`
 	Order       Order     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	DoctorID    uint      `json:"-"`
