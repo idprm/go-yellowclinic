@@ -28,8 +28,11 @@ func ChatUser(c *fiber.Ctx) error {
 		})
 	}
 
+	var user model.User
+	database.Datasource.DB().Where("msisdn", req.Msisdn).First(&user)
+
 	var chat model.Chat
-	database.Datasource.DB().Joins("Order", database.Datasource.DB().Where(&model.Order{Voucher: req.Voucher})).Where("msisdn", req.Msisdn).Where("is_leave", false).Preload("User").Preload("Doctor").Preload("Order").First(&chat)
+	database.Datasource.DB().Joins("Order", database.Datasource.DB().Where(&model.Order{Voucher: req.Voucher})).Where("user_id", user.ID).Where("is_leave", false).Preload("User").Preload("Doctor").Preload("Order").First(&chat)
 
 	return c.Status(fiber.StatusOK).JSON(&chat)
 }
