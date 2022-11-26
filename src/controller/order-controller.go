@@ -107,7 +107,7 @@ func OrderChat(c *fiber.Ctx) error {
 	} else {
 
 		var chat model.Chat
-		resultCount := database.Datasource.DB().Joins("Order", database.Datasource.DB().Where(&model.Order{UserID: user.ID, Voucher: user.LatestVoucher})).Where("is_leave", false).First(&chat)
+		resultCount := database.Datasource.DB().Joins("Order", database.Datasource.DB().Where(&model.Order{UserID: user.ID, Voucher: req.Voucher})).Where(&model.Chat{UserID: user.ID, IsLeave: false}).First(&chat)
 
 		if resultCount.RowsAffected > 0 {
 			return c.Status(fiber.StatusCreated).JSON(fiber.Map{
