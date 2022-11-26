@@ -107,7 +107,7 @@ func OrderChat(c *fiber.Ctx) error {
 	} else {
 
 		var order model.Order
-		database.Datasource.DB().Where("voucher", req.Voucher).First(&order)
+		database.Datasource.DB().Where("voucher", user.LatestVoucher).First(&order)
 
 		var chat model.Chat
 		resultCount := database.Datasource.DB().Where(&model.Chat{OrderID: order.ID, IsLeave: false}).First(&chat)
