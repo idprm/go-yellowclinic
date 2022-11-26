@@ -31,8 +31,14 @@ func ChatUser(c *fiber.Ctx) error {
 	var user model.User
 	database.Datasource.DB().Where("msisdn", req.Msisdn).First(&user)
 
+	var order model.Order
+	isOrder := database.Datasource.DB().Where(&model.Order{UserID: user.ID, Voucher: req.Voucher}).First(&order)
+	if isOrder.RowsAffected == 0 {
+		return c.Status(fiber.StatusOK).JSON(&order)
+	}
+
 	var chat model.Chat
-	database.Datasource.DB().Joins("Order", database.Datasource.DB().Where(&model.Order{UserID: user.ID, Voucher: req.Voucher})).Preload("User").Preload("Doctor").Preload("Order").Find(&chat)
+	database.Datasource.DB().Joins("Order", database.Datasource.DB().Where(&model.Order{UserID: user.ID, Voucher: req.Voucher})).Where(&model.Chat{UserID: user.ID, IsLeave: true}).Preload("User").Preload("Doctor").Preload("Order").First(&chat)
 
 	return c.Status(fiber.StatusOK).JSON(&chat)
 }
