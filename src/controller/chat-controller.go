@@ -31,10 +31,10 @@ func ChatUser(c *fiber.Ctx) error {
 	var user model.User
 	database.Datasource.DB().Where("msisdn", req.Msisdn).First(&user)
 
-	var chat model.Chat
-	database.Datasource.DB().Joins("Order", database.Datasource.DB().Where(&model.Order{UserID: user.ID, Voucher: req.Voucher})).Where("is_leave", false).Preload("User").Preload("Doctor").Preload("Order").First(&chat)
+	var order model.Order
+	database.Datasource.DB().Joins("Chat", database.Datasource.DB().Where(&model.Chat{IsLeave: false})).Where("user_id", user.ID).Where("voucher", req.Voucher).Preload("User").Preload("Doctor").Preload("Chat").First(&order)
 
-	return c.Status(fiber.StatusOK).JSON(&chat)
+	return c.Status(fiber.StatusOK).JSON(&order)
 }
 
 func ChatDoctor(c *fiber.Ctx) error {
