@@ -242,9 +242,20 @@ func sendbirdProcess(userId uint64, doctorId uint, latestVoucher string) error {
 		}
 		// insert to zenziva
 		database.Datasource.DB().Create(&model.Zenziva{
-			Msisdn:   order.User.Msisdn,
+			Msisdn:   order.Doctor.Phone,
 			Action:   actionCreateNotif,
 			Response: zenzifaNotif,
+		})
+
+		zenzifaNotifAssist, err := handler.ZenzivaSendSMS("6285229883299", message)
+		if err != nil {
+			return errors.New(err.Error())
+		}
+		// insert to zenziva
+		database.Datasource.DB().Create(&model.Zenziva{
+			Msisdn:   "6285229883299",
+			Action:   actionCreateNotif,
+			Response: zenzifaNotifAssist,
 		})
 
 		// auto message to user
