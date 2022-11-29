@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"log"
+	"time"
 
 	"github.com/idprm/go-yellowclinic/src/database"
 	"github.com/idprm/go-yellowclinic/src/handler"
@@ -32,6 +33,10 @@ var callbackCmd = &cobra.Command{
 			if err != nil {
 				log.Println(err.Error())
 			}
+
+			chat.IsLeave = true
+			chat.LeaveAt = time.Now()
+			database.Datasource.DB().Save(&chat)
 
 			database.Datasource.DB().Create(&model.Callback{
 				Msisdn:   chat.User.Msisdn,
