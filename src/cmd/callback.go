@@ -34,15 +34,15 @@ var callbackCmd = &cobra.Command{
 				log.Println(err.Error())
 			}
 
-			chat.IsLeave = true
-			chat.LeaveAt = time.Now()
-			database.Datasource.DB().Save(&chat)
-
+			// insert to callback
 			database.Datasource.DB().Create(&model.Callback{
 				Msisdn:   chat.User.Msisdn,
 				Action:   chat.Order.Voucher,
 				Response: callback,
 			})
+
+			// update chat is leave = true
+			database.Datasource.DB().Model(&model.Chat{}).Where("id", ch.ID).Updates(&model.Chat{IsLeave: true, LeaveAt: time.Now()})
 
 		}
 	},
