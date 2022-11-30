@@ -191,8 +191,6 @@ func sendbirdProcess(userId uint64, doctorId uint, latestVoucher string) error {
 	if resultChat.RowsAffected > 0 {
 		// check channel if exist
 		if isChannel == false {
-			// update chat is leave = true
-			database.Datasource.DB().Model(&model.Chat{}).Where("id", chat.ID).Updates(&model.Chat{IsLeave: true, LeaveAt: time.Now()})
 
 			callback, err := handler.CallbackVoucher(order.Voucher)
 			if err != nil {
@@ -205,6 +203,9 @@ func sendbirdProcess(userId uint64, doctorId uint, latestVoucher string) error {
 				Action:   order.Voucher,
 				Response: callback,
 			})
+
+			// update chat is leave = true
+			database.Datasource.DB().Model(&model.Chat{}).Where("id", chat.ID).Updates(&model.Chat{IsLeave: true, LeaveAt: time.Now()})
 
 			// delete channel sendbird
 			deleteGroupChannel, err := handler.SendbirdDeleteGroupChannel(chat)
