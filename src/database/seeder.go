@@ -61,8 +61,8 @@ var doctors = []model.Doctor{
 		ConsultationSchedule: "06.00 - 23.00 WIB",
 		PlacePractice:        "Jakarta Timur, DKI Jakarta",
 		Phone:                "6281776736076",
-		Start:                time.Now(),
-		End:                  time.Now(),
+		Start:                time.Date(2020, time.April, 11, 06, 01, 01, 0, time.Local),
+		End:                  time.Date(2020, time.April, 11, 23, 00, 01, 0, time.Local),
 	},
 	{
 		Username:             "dr-ayu",
@@ -75,8 +75,8 @@ var doctors = []model.Doctor{
 		ConsultationSchedule: "06.00 - 23.00 WIB",
 		PlacePractice:        "Bogor, Jawa Barat",
 		Phone:                "6281212480644",
-		Start:                time.Date(2020, time.April, 11, 00, 01, 01, 0, time.Local),
-		End:                  time.Date(2020, time.April, 11, 23, 59, 01, 0, time.Local),
+		Start:                time.Date(2020, time.April, 11, 06, 01, 01, 0, time.Local),
+		End:                  time.Date(2020, time.April, 11, 23, 00, 01, 0, time.Local),
 	},
 	{
 		Username:             "dr-peter",
@@ -89,8 +89,8 @@ var doctors = []model.Doctor{
 		ConsultationSchedule: "06.00 - 23.00 WIB",
 		PlacePractice:        "Ngabang, Kalimantan Timur",
 		Phone:                "6281776736076",
-		Start:                time.Now(),
-		End:                  time.Now(),
+		Start:                time.Date(2020, time.April, 11, 06, 01, 01, 0, time.Local),
+		End:                  time.Date(2020, time.April, 11, 23, 00, 01, 0, time.Local),
 	},
 }
 
