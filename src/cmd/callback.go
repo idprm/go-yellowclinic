@@ -16,7 +16,7 @@ var callbackCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		rows, err := database.Datasource.DB().Model(&model.Chat{}).Where("is_leave", false).Where("DATE(created_at) <= DATE(NOW())").Rows()
+		rows, err := database.Datasource.DB().Model(&model.Chat{}).Where("is_leave", false).Where("created_at < NOW() - INTERVAL 6 HOUR").Rows()
 		if err != nil {
 			log.Println(err)
 		}
