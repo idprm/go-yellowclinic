@@ -70,7 +70,7 @@ func OrderChat(c *fiber.Ctx) error {
 	 */
 	var order model.Order
 	resultOrder := database.Datasource.DB().
-		Where("voucher", req.Voucher).
+		Where("voucher", user.LatestVoucher).
 		First(&order)
 
 	finishUrl := config.ViperEnv("APP_HOST") + "/chat"
