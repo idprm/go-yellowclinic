@@ -70,7 +70,7 @@ func OrderChat(c *fiber.Ctx) error {
 	 */
 	var order model.Order
 	resultOrder := database.Datasource.DB().
-		Where("voucher", user.LatestVoucher).
+		Where("voucher", req.Voucher).
 		First(&order)
 
 	finishUrl := config.ViperEnv("APP_HOST") + "/chat"
@@ -83,14 +83,14 @@ func OrderChat(c *fiber.Ctx) error {
 			UserID:   user.ID,
 			DoctorID: doctor.ID,
 			Number:   "ORD-" + util.TimeStamp(),
-			Voucher:  user.LatestVoucher,
+			Voucher:  req.Voucher,
 			Total:    10000,
 		})
 
 		/**
 		 * SENDBIRD PROCESS
 		 */
-		err := sendbirdProcess(user.ID, doctor.ID, user.LatestVoucher)
+		err := sendbirdProcess(user.ID, doctor.ID, req.Voucher)
 		if err != nil {
 			return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
 				"error":   true,
@@ -108,7 +108,7 @@ func OrderChat(c *fiber.Ctx) error {
 	} else {
 
 		var order model.Order
-		database.Datasource.DB().Where("voucher", user.LatestVoucher).First(&order)
+		database.Datasource.DB().Where("voucher", req.Voucher).First(&order)
 
 		var chat model.Chat
 		resultCount := database.Datasource.DB().Where("order_id", order.ID).Where("is_leave", false).First(&chat)
