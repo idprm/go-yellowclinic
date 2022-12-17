@@ -79,6 +79,7 @@ func AuthHandler(c *fiber.Ctx) error {
 			IpAddress:     req.IpAddress,
 		})
 	} else {
+		user.Name = req.Name
 		user.LatestVoucher = req.Voucher
 		user.IpAddress = req.IpAddress
 		database.Datasource.DB().Save(&user)
