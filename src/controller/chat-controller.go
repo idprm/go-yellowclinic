@@ -84,7 +84,7 @@ func ChatLeave(c *fiber.Ctx) error {
 
 	database.Datasource.DB().Create(&model.Sendbird{
 		Msisdn:   user.Msisdn,
-		Action:   "LEAVE GROUP CHANNEL",
+		Action:   "USER LEAVE GROUP CHANNEL",
 		Response: leaveGroupChannel,
 	})
 
@@ -123,37 +123,20 @@ func ChatLeaveDoctor(c *fiber.Ctx) error {
 	}
 
 	var chat model.Chat
-	database.Datasource.DB().Where("channel_url", req.ChannelUrl).Preload("User").First(&chat)
+	database.Datasource.DB().Where("channel_url", req.ChannelUrl).Preload("Doctor").First(&chat)
 
-	leaveGroupChannel, _, err := handler.SendbirdLeaveGroupChannel(chat.ChannelUrl, chat.User.Msisdn)
+	leaveGroupChannel, _, err := handler.SendbirdLeaveGroupChannel(chat.ChannelUrl, chat.Doctor.Username)
 	if err != nil {
 		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
 			"error":   true,
 			"message": err.Error(),
 		})
 	}
-
-	chat.IsLeave = true
-	chat.LeaveAt = time.Now()
-	database.Datasource.DB().Save(&chat)
 
 	database.Datasource.DB().Create(&model.Sendbird{
-		Msisdn:   chat.User.Msisdn,
-		Action:   "LEAVE GROUP CHANNEL",
+		Msisdn:   chat.Doctor.Phone,
+		Action:   "DOCTOR LEAVE GROUP CHANNEL",
 		Response: leaveGroupChannel,
-	})
-
-	callback, err := handler.CallbackVoucher(chat.User.LatestVoucher)
-	if err != nil {
-		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
-			"error":   true,
-			"message": err.Error(),
-		})
-	}
-	database.Datasource.DB().Create(&model.Callback{
-		Msisdn:   chat.User.Msisdn,
-		Action:   chat.User.LatestVoucher,
-		Response: callback,
 	})
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"error": false, "message": "Leaved"})
