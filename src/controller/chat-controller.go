@@ -133,11 +133,23 @@ func ChatLeaveDoctor(c *fiber.Ctx) error {
 		})
 	}
 
-	database.Datasource.DB().Create(&model.Sendbird{
+	muteUserChannel, err := handler.SendbirdMuteUser(chat.ChannelUrl, chat.User)
+	if err != nil {
+		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
+			"error":   true,
+			"message": err.Error(),
+		})
+	}
+
+	database.Datasource.DB().Create(&[]model.Sendbird{{
 		Msisdn:   chat.Doctor.Phone,
 		Action:   "DOCTOR LEAVE GROUP CHANNEL",
 		Response: leaveGroupChannel,
-	})
+	}, {
+		Msisdn:   chat.User.Msisdn,
+		Action:   "USER MUTE GROUP CHANNEL",
+		Response: muteUserChannel,
+	}})
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"error": false, "message": "Leaved"})
 }

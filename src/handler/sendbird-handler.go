@@ -41,6 +41,10 @@ type AutoMessage struct {
 	Message     string `json:"message"`
 }
 
+type MuteUser struct {
+	UserId string `json:"user_id"`
+}
+
 type ErrorResponse struct {
 	ChannelUrl string `json:"channel_url"`
 	Error      bool   `json:"error"`
@@ -368,6 +372,49 @@ func SendbirdAutoMessageDoctor(channel string, doctor model.Doctor, user model.U
 		MessageType: "MESG",
 		UserId:      doctor.Username,
 		Message:     replaceMessage,
+	}
+
+	payload, _ := json.Marshal(message)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
+
+	if err != nil {
+		return "", errors.New(err.Error())
+	}
+
+	req.Header.Set("Api-Token", config.ViperEnv("SB_API_TOKEN"))
+	req.Header.Set("Content-Type", "application/json; charset=utf8")
+
+	tr := &http.Transport{
+		MaxIdleConns:       10,
+		IdleConnTimeout:    30 * time.Second,
+		DisableCompression: true,
+	}
+
+	client := &http.Client{
+		Timeout:   30 * time.Second,
+		Transport: tr,
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", errors.New(err.Error())
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", errors.New(err.Error())
+	}
+
+	return string([]byte(body)), nil
+}
+
+func SendbirdMuteUser(channel string, user model.User) (string, error) {
+	url := "https://api-" + config.ViperEnv("SB_APP_ID") + ".sendbird.com/v3/group_channels/" + channel + "/mute"
+
+	message := MuteUser{
+		UserId: user.Msisdn,
 	}
 
 	payload, _ := json.Marshal(message)
