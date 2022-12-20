@@ -123,7 +123,7 @@ func ChatLeaveDoctor(c *fiber.Ctx) error {
 	}
 
 	var chat model.Chat
-	database.Datasource.DB().Where("channel_url", req.ChannelUrl).Preload("Doctor").First(&chat)
+	database.Datasource.DB().Where("channel_url", req.ChannelUrl).Preload("Doctor").Preload("User").First(&chat)
 
 	leaveGroupChannel, _, err := handler.SendbirdLeaveGroupChannel(chat.ChannelUrl, chat.Doctor.Username)
 	if err != nil {
