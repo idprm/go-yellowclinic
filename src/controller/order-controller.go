@@ -192,18 +192,6 @@ func sendbirdProcess(userId uint64, doctorId uint, latestVoucher string) error {
 		// check channel if exist
 		if isChannel == false {
 
-			callback, err := handler.CallbackVoucher(order.Voucher)
-			if err != nil {
-				return errors.New(err.Error())
-			}
-
-			// insert to callback
-			database.Datasource.DB().Create(&model.Callback{
-				Msisdn:   order.User.Msisdn,
-				Action:   order.Voucher,
-				Response: callback,
-			})
-
 			// update chat is leave = true
 			database.Datasource.DB().Model(&model.Chat{}).Where("id", chat.ID).Updates(&model.Chat{IsLeave: true, LeaveAt: time.Now()})
 
