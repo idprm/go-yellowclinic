@@ -99,6 +99,9 @@ func OrderChat(c *fiber.Ctx) error {
 			})
 		}
 
+		// updated count voucher
+		database.Datasource.DB().Exec(`UPDATE configs SET value = value + ? WHERE name = "USAGE_VOUCHER"`, "1")
+
 		return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 			"error":        false,
 			"message":      "Created Successful",
